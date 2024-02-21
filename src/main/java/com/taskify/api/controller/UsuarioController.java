@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.taskify.api.model.Usuario;
@@ -52,6 +53,17 @@ public class UsuarioController {
 
         if(usuarioExistente.isPresent()){
             return ResponseEntity.status(HttpStatus.OK).body(usuarioRepository.save(usuario));
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @GetMapping("/email")
+    public ResponseEntity<Optional<Usuario>> buscarUsuarioPorEmail(@RequestParam("email")String email){
+        Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(email);
+        
+        if(usuarioExistente.isPresent()){
+            return ResponseEntity.status(HttpStatus.OK).body(usuarioExistente);
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
